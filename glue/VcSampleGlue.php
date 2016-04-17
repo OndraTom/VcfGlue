@@ -14,12 +14,6 @@ class VcSampleGlue extends VcfGlue
 	protected $isProcessed = false;
 	
 	
-	public function __construct($directory, $extension) 
-	{
-		parent::__construct($directory, $extension);
-	}
-	
-	
 	protected function getFileNameParts($fileName)
 	{
 		$parts = explode('_', $fileName);
@@ -79,18 +73,6 @@ class VcSampleGlue extends VcfGlue
 	}
 	
 	
-	protected function deleteResultFile()
-	{
-		if (file_exists($this->resultFilePath))
-		{
-			if (!unlink($this->resultFilePath))
-			{
-				throw new GlueException('Cannote delete old result file.');
-			}
-		}
-	}
-	
-	
 	protected function addOutputRow(array &$outputRow, array $fileRow, $prefix)
 	{
 		foreach ($fileRow as $column => $value)
@@ -141,7 +123,7 @@ class VcSampleGlue extends VcfGlue
 			throw new GlueException('Cannote save unprocessed data.');
 		}
 		
-		$this->deleteResultFile();
+		//$this->deleteResultFile();
 		
 		foreach ($this->result as $key => $files)
 		{

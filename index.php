@@ -7,14 +7,10 @@
 	<body>
 		<h1>VcfGlue</h1>
 		
-		<form method="post">
+		<form method="post" enctype="multipart/form-data">
 			<div>
-				<label for="dir">Directory: </label>
-				<input type="text" size="50" name="dir" id="dir" value="<?php echo isset($_POST['dir']) ? $_POST['dir'] : '' ?>" />
-			</div>
-			<div>
-				<label for="ext">Extension: </label>
-				<input type="test" size="10" name="ext" id="ext" value="<?php echo isset($_POST['ext']) ? $_POST['ext'] : 'tsv' ?>" />
+				<label for="files">Files: </label>
+				<input id="files" name="files[]" type="file" multiple />
 			</div>
 			<div>
 				<label for="merge-type">Merge type: </label>
@@ -40,17 +36,17 @@ require_once(__DIR__ . '/glue/VcfGlue.php');
 require_once(__DIR__ . '/glue/VcSampleGlue.php');
 require_once(__DIR__ . '/glue/SamplesGlue.php');
 
-if (isset($_POST['dir']) && isset($_POST['ext']) && isset($_POST['mergeType']))
-{
+if (isset($_FILES['files']) && isset($_POST['mergeType']))
+{	
 	try
 	{
 		if ($_POST['mergeType'] == 'vcSample')
 		{
-			$glue = new VcSampleGlue($_POST['dir'], $_POST['ext']);
+			$glue = new VcSampleGlue($_FILES['files']);
 		}
 		else
 		{
-			$glue = new SamplesGlue($_POST['dir'], $_POST['ext']);
+			$glue = new SamplesGlue($_FILES['files']);
 		}
 	
 		$glue->process();

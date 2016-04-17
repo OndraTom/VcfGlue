@@ -9,7 +9,7 @@ abstract class VcfGlue
 	const RESULT_FILE_NAME = 'result';
 	
 	
-	protected $resultFilePath;
+	protected $headerWrote = false;
 	
 	
 	protected $positionColumns = [
@@ -34,22 +34,18 @@ abstract class VcfGlue
 	protected $result = [];
 	
 	
-	public function __construct($directory, $extension)
+	public function __construct(array $files)
 	{
-		$this->loadParsedFiles($directory, $extension);
-		
-		$this->resultFilePath = $this->getSanitizedDirName($directory) . static::RESULT_FILE_NAME;
+		$this->loadParsedFiles($files);
+		$this->setHeaders();
 	}
 	
 	
-	protected function getSanitizedDirName($dirName)
+	protected function setHeaders()
 	{
-		if (substr($dirName, -1) != DIRECTORY_SEPARATOR)
-		{
-			$dirName .= DIRECTORY_SEPARATOR;
-		}
-		
-		return $dirName;
+		ob_end_clean();
+		header('Content-type: text/plain');
+		header('Content-Disposition: attachment; filename=' . static::RESULT_FILE_NAME);
 	}
 	
 	
@@ -66,31 +62,25 @@ abstract class VcfGlue
 	}
 	
 	
-	protected function loadParsedFiles($directory, $extension)
+	protected function loadParsedFiles(array $files)
 	{	
-		if (!file_exists($directory) || !is_dir($directory))
-		{
-			throw new GlueException('Invalid directory');
-		}
+		$filesCount = count($files['name']);
 		
-		foreach (new DirectoryIterator($directory) as $file)
-		{
-			if ($file->isFile() && $file->getExtension() == $extension)
+		for ($i = 0; $i < $filesCount; $i++)
+		{	
+			$parsedFile = new DelimiterParser($files['tmp_name'][$i], self::COLUMN_SEPARATOR);
+			
+			if (empty($parsedFile->parse()))
 			{
-				$parsedFile = new DelimiterParser($file->getRealPath(), self::COLUMN_SEPARATOR);
-				
-				if (empty($parsedFile->parse()))
-				{
-					throw new GlueException('File ' . $file->getBasename() . ' has no rows.');
-				}
-				
-				if (!$this->isFileHeaderValid(array_keys($parsedFile->gerRows()[0])))
-				{
-					throw new GlueException('File ' . $file->getBasename() . ' has invalid header.');
-				}
-				
-				$this->files[$file->getBasename()] = $parsedFile->parse();
+				throw new GlueException('File ' . $files['name'][$i] . ' has no rows.');
 			}
+			
+			if (!$this->isFileHeaderValid(array_keys($parsedFile->gerRows()[0])))
+			{
+				throw new GlueException('File ' . $files['name'][$i] . ' has invalid header.');
+			}
+			
+			$this->files[$files['name'][$i]] = $parsedFile->parse();
 		}
 		
 		if (empty($this->files))
@@ -116,18 +106,17 @@ abstract class VcfGlue
 	
 	protected function write($content)
 	{
-		if (!file_put_contents($this->resultFilePath, $content, FILE_APPEND))
-		{
-			throw new GlueException('Saving failed.');
-		}
+		echo $content;
 	}
 
 
 	protected function saveRow(array $row)
 	{	
-		if (!file_exists($this->resultFilePath))
+		if (!$this->headerWrote)
 		{
 			$this->write(implode("\t", array_keys($row)) . "\n");
+			
+			$this->headerWrote = true;
 		}
 		
 		$this->write(implode("\t", $row) . "\n");
