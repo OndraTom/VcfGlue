@@ -12,6 +12,7 @@ require_once(__DIR__ . '/glue/GlueException.php');
 require_once(__DIR__ . '/glue/VcfGlue.php');
 require_once(__DIR__ . '/glue/VcSampleGlue.php');
 require_once(__DIR__ . '/glue/SamplesGlue.php');
+require_once(__DIR__ . '/glue/VcfGlueFactory.php');
 
 // Info messages.
 $messages = '';
@@ -22,14 +23,7 @@ if (isset($_FILES['files']) && isset($_POST['mergeType']))
 	try
 	{
 		// Create Glue instance (by type).
-		if ($_POST['mergeType'] == 'vcSample')
-		{
-			$glue = new VcSampleGlue($_FILES['files']);
-		}
-		else
-		{
-			$glue = new SamplesGlue($_FILES['files']);
-		}
+		$glue = VcfGlueFactory::create($_POST['mergeType'], $_FILES['files']);
 	
 		// Process, save, download.
 		$glue->process();
