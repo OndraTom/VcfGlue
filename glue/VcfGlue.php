@@ -98,7 +98,6 @@ abstract class VcfGlue
 	 */
 	protected function setHeaders()
 	{
-		ob_end_clean();
 		header('Content-type: text/plain');
 		header('Content-Disposition: attachment; filename=' . static::RESULT_FILE_NAME);
 	}
@@ -218,9 +217,13 @@ abstract class VcfGlue
 	 */
 	public function download()
 	{
+		ob_end_clean();
+		
 		$this->setHeaders();
 		
 		echo $this->resultContent;
+		
+		die;
 	}
 	
 	
