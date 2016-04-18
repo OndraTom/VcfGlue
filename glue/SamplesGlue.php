@@ -1,13 +1,32 @@
 <?php
 
+/**
+ * Samples glue.
+ * 
+ * @author oto
+ */
 class SamplesGlue extends VcfGlue
 {
+	/**
+	 * Name of the output file.
+	 */
 	const RESULT_FILE_NAME = 'samples_merge.bravo';
 	
 	
+	/**
+	 * Result columns.
+	 * 
+	 * @var array
+	 */
 	protected $columns = [];
 	
 	
+	/**
+	 * Checks the file columns validity.
+	 * 
+	 * @param	array	$columns	Examined columns.
+	 * @return	bool
+	 */
 	protected function areValidColumns(array $columns)
 	{
 		if (count($columns) != count($this->columns))
@@ -27,6 +46,11 @@ class SamplesGlue extends VcfGlue
 	}
 	
 	
+	/**
+	 * Adds the file row into the result.
+	 * 
+	 * @param	array	$row	File row.
+	 */
 	protected function addResultRow(array $row)
 	{	
 		$rowKey = $this->getRowKey($row);
@@ -40,6 +64,13 @@ class SamplesGlue extends VcfGlue
 	}
 	
 	
+	/**
+	 * Processes the files data.
+	 * 
+	 * Prepares the result.
+	 * 
+	 * @throws GlueException
+	 */
 	public function process()
 	{
 		foreach ($this->files as $fileName => $rows)
@@ -64,6 +95,11 @@ class SamplesGlue extends VcfGlue
 	}
 	
 	
+	/**
+	 * Saves the result data.
+	 * 
+	 * Prepares the output.
+	 */
 	public function save()
 	{
 		foreach ($this->result as $key => $rows)

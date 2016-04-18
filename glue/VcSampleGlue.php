@@ -1,19 +1,54 @@
 <?php
 
+/**
+ * Sample pieces glue.
+ * 
+ * @author oto
+ */
 class VcSampleGlue extends VcfGlue
 {
+	/**
+	 * Name of the output file.
+	 */
 	const RESULT_FILE_NAME = 'vc_sample_merge.csv';
 	
 	
+	/**
+	 * Name of the sample.
+	 * 
+	 * @var string
+	 */
 	protected $sample;
 	
 	
+	/**
+	 * List of the file columns.
+	 * 
+	 * [
+	 *		fileName => [columns],
+	 *		...
+	 * ]
+	 * 
+	 * @var array
+	 */
 	protected $fileColumns = [];
 	
 	
+	/**
+	 * Flag of the processed gluing.
+	 * 
+	 * @var bool
+	 */
 	protected $isProcessed = false;
 	
 	
+	/**
+	 * Separates the input file name into sample and prefix.
+	 * 
+	 * @param	string	$fileName	File name.
+	 * @return	array
+	 * @throws	GlueException
+	 */
 	protected function getFileNameParts($fileName)
 	{
 		$parts = explode('_', $fileName);
@@ -30,6 +65,14 @@ class VcSampleGlue extends VcfGlue
 	}
 	
 	
+	/**
+	 * Adds the file row into the result.
+	 * 
+	 * It also fills the file columns array.
+	 * 
+	 * @param	string	$name	File name.
+	 * @param	array	$row	File row.
+	 */
 	protected function addResultRow($name, array $row)
 	{
 		if (!isset($this->fileColumns[$name]))
@@ -48,6 +91,13 @@ class VcSampleGlue extends VcfGlue
 	}
 	
 	
+	/**
+	 * Processes the files data.
+	 * 
+	 * It prepares the result.
+	 * 
+	 * @throws GlueException
+	 */
 	public function process()
 	{	
 		foreach ($this->files as $fileName => $rows)
@@ -73,6 +123,15 @@ class VcSampleGlue extends VcfGlue
 	}
 	
 	
+	/**
+	 * Adds file row into the output.
+	 * 
+	 * It's gluing file columns consecutively.
+	 * 
+	 * @param	array	$outputRow	The result row.
+	 * @param	array	$fileRow	File row.
+	 * @param	string	$prefix		File columns prefix.
+	 */
 	protected function addOutputRow(array &$outputRow, array $fileRow, $prefix)
 	{
 		foreach ($fileRow as $column => $value)
@@ -85,7 +144,13 @@ class VcSampleGlue extends VcfGlue
 	}
 	
 	
-	protected function getEmptyFileRows($fileName)
+	/**
+	 * Returns empty file columns.
+	 * 
+	 * @param	string	$fileName	File name.
+	 * @return	string
+	 */
+	protected function getEmptyFileRow($fileName)
 	{
 		$rows = [];
 		
@@ -98,7 +163,15 @@ class VcSampleGlue extends VcfGlue
 	}
 	
 	
-	protected function getKeyPositionColumns($keyFiles)
+	/**
+	 * Returns position columns.
+	 * 
+	 * Takes first file columns on position and returns its data.
+	 * 
+	 * @param	array	$keyFiles	Files data on particular position.
+	 * @return	array
+	 */
+	protected function getKeyPositionColumns(array $keyFiles)
 	{
 		$columns = [];
 		
@@ -116,14 +189,19 @@ class VcSampleGlue extends VcfGlue
 	}
 	
 	
+	/**
+	 * Saves the result data.
+	 * 
+	 * Prepares the output.
+	 * 
+	 * @throws GlueException
+	 */
 	public function save()
 	{
 		if (!$this->isProcessed)
 		{
 			throw new GlueException('Cannote save unprocessed data.');
 		}
-		
-		//$this->deleteResultFile();
 		
 		foreach ($this->result as $key => $files)
 		{
@@ -139,7 +217,7 @@ class VcSampleGlue extends VcfGlue
 				}
 				else
 				{
-					$this->addOutputRow($outputRow, $this->getEmptyFileRows($fileName), $fileName);
+					$this->addOutputRow($outputRow, $this->getEmptyFileRow($fileName), $fileName);
 				}
 			}
 			
