@@ -36,7 +36,7 @@ if (isset($_FILES['files']) && isset($_POST['mergeType']))
 	// Make error message.
 	catch (Exception $e) 
 	{
-		$messages .= '<div class="alert alert-danger">Error: ' . $e->getMessage() . '</div>' . "\n";
+		$messages .= '<div class="message alert alert-danger">Error: ' . $e->getMessage() . '</div>' . "\n";
 	}
 }
 
@@ -55,21 +55,30 @@ if (isset($_FILES['files']) && isset($_POST['mergeType']))
 			<h1>VcfGlue</h1>
 			
 			<?php echo $messages ?>
-
-			<form method="post" enctype="multipart/form-data">
-				<div class="form-group">
-					<label for="files">Files: </label>
-					<input id="files" class="form-control" name="files[]" type="file" multiple />
+			
+			<div class="panel panel-default grey">
+				<div class="panel-body">
+					<form method="post" enctype="multipart/form-data" id="glue-form">
+						<div class="form-group">
+							<label for="files">Files: </label>
+							<input id="files" class="form-control file" name="files[]" type="file" multiple />
+						</div>
+						<div class="form-group">
+							<label for="merge-type">Merge type: </label>
+							<select name="mergeType" id="merge-type" class="form-control">
+								<option value="vcSample"<?php echo isset($_POST['mergeType']) && $_POST['mergeType'] == 'vcSample' ? ' selected="selected"' : '' ?>>VC sample</option>
+								<option value="samples"<?php echo isset($_POST['mergeType']) && $_POST['mergeType'] == 'samples' ? ' selected="selected"' : '' ?>>Samples</option>
+							</select>
+						</div>
+						<button type="submit" class="btn btn-default">Process</button>
+					</form>
 				</div>
-				<div class="form-group">
-					<label for="merge-type">Merge type: </label>
-					<select name="mergeType" id="merge-type" class="form-control">
-						<option value="vcSample"<?php echo isset($_POST['mergeType']) && $_POST['mergeType'] == 'vcSample' ? ' selected="selected"' : '' ?>>VC sample</option>
-						<option value="samples"<?php echo isset($_POST['mergeType']) && $_POST['mergeType'] == 'samples' ? ' selected="selected"' : '' ?>>Samples</option>
-					</select>
-				</div>
-				<button type="submit" class="btn btn-default">Process</button>
-			</form>
+			</div>
+			
+			<div class="content-footer">Totem | <?php echo date('Y') ?></div>
 		</div>
+		
+		<script src="./js/jquery-2.2.3.min.js"></script>
+		<script src="./js/my.js"></script>
 	</body>
 </html>

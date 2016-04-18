@@ -1,3 +1,16 @@
+.panel.grey {
+	background-color: #f8f8f8;
+}
+
 .container {
 	padding: 3rem 1.5rem;
+	max-width: 450px;
+}
+
+.form-control.file {
+	height: auto;
+}
+
+.content-footer {
+	text-align: center;
 }
