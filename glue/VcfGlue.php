@@ -1,5 +1,7 @@
 <?php
 
+namespace Totem\Tools;
+
 use Totem\Parsers\DelimiterParser;
 
 /**

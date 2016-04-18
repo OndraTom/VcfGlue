@@ -1,5 +1,9 @@
 <?php
 
+namespace Totem\Tools;
+
+use Exception;
+
 /**
  * Exception associated with Glue processing.
  * 

@@ -1,5 +1,7 @@
 <?php
 
+namespace Totem\Tools;
+
 /**
  * Sample pieces glue.
  * 

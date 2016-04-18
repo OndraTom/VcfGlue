@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Totem tool for merging the Variant Callers output files.
  * 
@@ -13,6 +14,8 @@ require_once(__DIR__ . '/glue/VcfGlue.php');
 require_once(__DIR__ . '/glue/VcSampleGlue.php');
 require_once(__DIR__ . '/glue/SamplesGlue.php');
 require_once(__DIR__ . '/glue/VcfGlueFactory.php');
+
+use Totem\Tools\VcfGlueFactory;
 
 // Info messages.
 $messages = '';
