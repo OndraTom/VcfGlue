@@ -4,7 +4,7 @@ namespace Totem\Tools;
 
 /**
  * Samples glue.
- * 
+ *
  * @author oto
  */
 class SamplesGlue extends VcfGlue
@@ -12,20 +12,28 @@ class SamplesGlue extends VcfGlue
 	/**
 	 * Name of the output file.
 	 */
-	const RESULT_FILE_NAME = 'samples_merge.bravo';
-	
-	
+	const RESULT_FILE_NAME = 'samples_merge.csv';
+
+
 	/**
 	 * Result columns.
-	 * 
+	 *
 	 * @var array
 	 */
 	protected $columns = [];
-	
-	
+
+
+	/**
+	 * Result file content.
+	 *
+	 * @var string
+	 */
+	protected $resultContent = '';
+
+
 	/**
 	 * Checks the file columns validity.
-	 * 
+	 *
 	 * @param	array	$columns	Examined columns.
 	 * @return	bool
 	 */
@@ -35,7 +43,7 @@ class SamplesGlue extends VcfGlue
 		{
 			return false;
 		}
-		
+
 		for ($i = 0; $i < count($columns); $i++)
 		{
 			if ($columns[$i] != $this->columns[$i])
@@ -43,34 +51,34 @@ class SamplesGlue extends VcfGlue
 				return false;
 			}
 		}
-		
+
 		return true;
 	}
-	
-	
+
+
 	/**
 	 * Adds the file row into the result.
-	 * 
+	 *
 	 * @param	array	$row	File row.
 	 */
 	protected function addResultRow(array $row)
-	{	
+	{
 		$rowKey = $this->getRowKey($row);
-		
+
 		if (!isset($this->result[$rowKey]))
 		{
 			$this->result[$rowKey] = [];
 		}
-		
+
 		$this->result[$rowKey][] = $row;
 	}
-	
-	
+
+
 	/**
 	 * Processes the files data.
-	 * 
+	 *
 	 * Prepares the result.
-	 * 
+	 *
 	 * @throws GlueException
 	 */
 	public function process()
@@ -87,7 +95,7 @@ class SamplesGlue extends VcfGlue
 				{
 					throw new GlueException('Files have incopatible headers');
 				}
-				
+
 				foreach ($rows as $row)
 				{
 					$this->addResultRow($row);
@@ -95,11 +103,11 @@ class SamplesGlue extends VcfGlue
 			}
 		}
 	}
-	
-	
+
+
 	/**
 	 * Saves the result data.
-	 * 
+	 *
 	 * Prepares the output.
 	 */
 	public function save()
@@ -107,13 +115,34 @@ class SamplesGlue extends VcfGlue
 		foreach ($this->result as $key => $rows)
 		{
 			$samplesCount = count($rows);
-			
+
 			foreach ($rows as $row)
 			{
 				$row['SAMPLES_COUNT'] = $samplesCount;
-				
-				$this->saveRow($row);
+
+				if ($this->resultContent == '')
+				{
+					$this->resultContent .= implode("\t", array_keys($row)) . "\n";
+				}
+
+				$this->resultContent .= implode("\t", $row) . "\n";
 			}
 		}
+	}
+
+
+	/**
+	 * Sets header for download and sends the result content into the output.
+	 */
+	public function download()
+	{
+		header('Content-type: text/plain');
+		header('Content-Disposition: attachment; filename=' . static::RESULT_FILE_NAME);
+
+		ob_end_clean();
+
+		echo $this->resultContent;
+
+		die;
 	}
 }
