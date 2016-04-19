@@ -26,7 +26,10 @@ class VcSampleGlue extends VcfGlue
 	 * List of the file columns.
 	 *
 	 * [
-	 *		fileName => [columns],
+	 *		sample => [
+	 *			fileName => [columns],
+	 *			...
+	 *		],
 	 *		...
 	 * ]
 	 *
@@ -158,7 +161,7 @@ class VcSampleGlue extends VcfGlue
 	/**
 	 * Returns empty file columns.
 	 *
-	 * @param	string	$sample
+	 * @param	string	$sample		Sample name.
 	 * @param	string	$fileName	File name.
 	 * @return	string
 	 */
