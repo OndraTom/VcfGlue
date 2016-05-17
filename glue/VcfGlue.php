@@ -128,17 +128,14 @@ abstract class VcfGlue
 		{
 			$parsedFile = new DelimiterParser($files['tmp_name'][$i], self::COLUMN_SEPARATOR);
 
-			if (empty($parsedFile->parse()))
-			{
-				throw new GlueException('File ' . $files['name'][$i] . ' has no rows.');
-			}
+			$parsedFile->parse();
 
-			if (!$this->isFileHeaderValid(array_keys($parsedFile->gerRows()[0])))
+			if (!empty($parsedFile->gerRows()) && !$this->isFileHeaderValid(array_keys($parsedFile->gerRows()[0])))
 			{
 				throw new GlueException('File ' . $files['name'][$i] . ' has invalid header.');
 			}
 
-			$this->files[$files['name'][$i]] = $parsedFile->parse();
+			$this->files[$files['name'][$i]] = $parsedFile->gerRows();
 		}
 
 		if (empty($this->files))
