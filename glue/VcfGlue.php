@@ -113,6 +113,7 @@ abstract class VcfGlue
 	 *
 	 * @param	array	$files	Input files.
 	 * @throws	GlueException
+	 * @throws	ParserException
 	 */
 	protected function loadParsedFiles(array $files)
 	{

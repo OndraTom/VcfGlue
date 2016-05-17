@@ -261,6 +261,7 @@ class DelimiterParser
 	 * Returns file rows (chopped).
 	 *
 	 * @return array
+	 * @throws ParserException
 	 */
 	public function parse()
 	{
@@ -290,7 +291,7 @@ class DelimiterParser
 					{
 						$this->columns = array_combine($fileRowChopped, $fileRowChopped);
 					}
-					
+
 					$columnsMap = $this->getColumnsMap($fileRowChopped);
 
 					// Skipping the first line.
