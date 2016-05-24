@@ -126,6 +126,8 @@ class VcfAnnoIn extends VcfGlue
 		{
 			foreach ($rows as $row)
 			{
+				$row = $this->getOrderedRow($row);
+				
 				if (!isset($this->outputFiles[$fileName]))
 				{
 					$this->outputFiles[$fileName] = implode("\t", array_keys($row)) . "\n";
@@ -134,6 +136,22 @@ class VcfAnnoIn extends VcfGlue
 				$this->outputFiles[$fileName] .= implode("\t", $row) . "\n";
 			}
 		}
+	}
+	
+	
+	protected function getOrderedRow(array $row)
+	{
+		$orderedRow = [
+			'CHROM' => $row['CHROM'],
+			'POS'	=> $row['POS'],
+			'END'	=> $row['END'],
+			'REF'	=> $row['REF'],
+			'ALT'	=> $row['ALT']
+		];
+		
+		unset($row['CHROM'], $row['POS'], $row['END'], $row['REF'], $row['ALT']);
+		
+		return array_merge($orderedRow, $row);
 	}
 
 
