@@ -14,6 +14,7 @@ class VcfGlueFactory
 	 */
 	const VC_SAMPLE = 'vcSample';
 	const SAMPLES	= 'samples';
+	const ANNOIN	= 'annoin';
 	
 	
 	/**
@@ -40,6 +41,9 @@ class VcfGlueFactory
 				
 			case self::SAMPLES:
 				return new SamplesGlue($files);
+				
+			case self::ANNOIN:
+				return new VcfAnnoIn($files);
 				
 			default:
 				throw new GlueException('Unknown VcfGlue type "' . $glueType . '"');

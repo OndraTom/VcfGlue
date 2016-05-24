@@ -13,6 +13,7 @@ require_once(__DIR__ . '/glue/GlueException.php');
 require_once(__DIR__ . '/glue/VcfGlue.php');
 require_once(__DIR__ . '/glue/VcSampleGlue.php');
 require_once(__DIR__ . '/glue/SamplesGlue.php');
+require_once(__DIR__ . '/glue/VcfAnnoIn.php');
 require_once(__DIR__ . '/glue/VcfGlueFactory.php');
 
 use Totem\Tools\VcfGlueFactory;
@@ -68,6 +69,7 @@ if (isset($_FILES['files']) && isset($_POST['mergeType']))
 							<select name="mergeType" id="merge-type" class="form-control">
 								<option value="vcSample"<?php echo isset($_POST['mergeType']) && $_POST['mergeType'] == 'vcSample' ? ' selected="selected"' : '' ?>>VC sample</option>
 								<option value="samples"<?php echo isset($_POST['mergeType']) && $_POST['mergeType'] == 'samples' ? ' selected="selected"' : '' ?>>Samples</option>
+								<option value="annoin"<?php echo isset($_POST['mergeType']) && $_POST['mergeType'] == 'annoin' ? ' selected="selected"' : '' ?>>Annoin</option>
 							</select>
 						</div>
 						<button type="submit" class="btn btn-default">Process</button>
