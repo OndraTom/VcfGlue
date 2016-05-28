@@ -61,7 +61,7 @@ abstract class VcfGlue
 	/**
 	 * Array of parsed input files.
 	 *
-	 * @var array
+	 * @var DelimiterParser[]
 	 */
 	protected $files = [];
 
@@ -130,12 +130,12 @@ abstract class VcfGlue
 
 			$parsedFile->parse();
 
-			if (!empty($parsedFile->gerRows()) && !$this->isFileHeaderValid(array_keys($parsedFile->gerRows()[0])))
+			if (!empty($parsedFile->getRows()) && !$this->isFileHeaderValid(array_keys($parsedFile->getRows()[0])))
 			{
 				throw new GlueException('File ' . $files['name'][$i] . ' has invalid header.');
 			}
 
-			$this->files[$files['name'][$i]] = $parsedFile->gerRows();
+			$this->files[$files['name'][$i]] = $parsedFile;
 		}
 
 		if (empty($this->files))

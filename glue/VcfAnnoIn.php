@@ -58,9 +58,9 @@ class VcfAnnoIn extends VcfGlue
 	 */
 	public function process()
 	{
-		foreach ($this->files as $fileName => $rows)
+		foreach ($this->files as $fileName => $parsedFile)
 		{
-			foreach ($rows as $row)
+			foreach ($parsedFile->getRows() as $row)
 			{
 				$this->addResultRow($fileName, $row);
 			}

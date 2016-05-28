@@ -88,16 +88,6 @@ class VcSampleGlue extends VcfGlue
 	 */
 	protected function addResultRow($sample, $name, array $row)
 	{
-		if (!isset($this->fileColumns[$sample]))
-		{
-			$this->fileColumns[$sample] = [];
-		}
-
-		if (!isset($this->fileColumns[$name]))
-		{
-			$this->fileColumns[$sample][$name] = array_keys($row);
-		}
-
 		if (!isset($this->result[$sample]))
 		{
 			$this->result[$sample] = [];
@@ -123,17 +113,40 @@ class VcSampleGlue extends VcfGlue
 	 */
 	public function process()
 	{
-		foreach ($this->files as $fileName => $rows)
+		foreach ($this->files as $fileName => $parsedFile)
 		{
 			list($sample, $name) = $this->getFileNameParts($fileName);
 
-			foreach ($rows as $row)
+			$this->addFileColumns($sample, $name, $parsedFile->getColumns());
+			
+			foreach ($parsedFile->getRows() as $row)
 			{
 				$this->addResultRow($sample, $name, $row);
 			}
 		}
 
 		$this->isProcessed = true;
+	}
+	
+	
+	/**
+	 * Inserts the new next file columns.
+	 * 
+	 * @param	string	$sample
+	 * @param	string	$name
+	 * @param	array	$columns
+	 */
+	protected function addFileColumns($sample, $name, array $columns)
+	{
+		if (!isset($this->fileColumns[$sample]))
+		{
+			$this->fileColumns[$sample] = [];
+		}
+
+		if (!isset($this->fileColumns[$name]))
+		{
+			$this->fileColumns[$sample][$name] = $columns;
+		}
 	}
 
 

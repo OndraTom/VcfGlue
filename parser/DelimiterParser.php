@@ -92,6 +92,17 @@ class DelimiterParser
 			throw new ParserException('File "' . $filePath . '" doesn\'t exist.');
 		}
 	}
+	
+	
+	/**
+	 * Returns parsed rows columns.
+	 * 
+	 * @return array
+	 */
+	public function getColumns()
+	{
+		return $this->columns;
+	}
 
 
 	/**
@@ -143,7 +154,7 @@ class DelimiterParser
 	 *
 	 * @return array
 	 */
-	public function gerRows()
+	public function getRows()
 	{
 		return $this->rows;
 	}

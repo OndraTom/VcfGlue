@@ -83,8 +83,10 @@ class SamplesGlue extends VcfGlue
 	 */
 	public function process()
 	{
-		foreach ($this->files as $fileName => $rows)
+		foreach ($this->files as $parsedFile)
 		{
+			$rows = $parsedFile->getRows();
+			
 			if (count($rows))
 			{
 				if (empty($this->columns))
