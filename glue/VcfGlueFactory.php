@@ -32,7 +32,7 @@ class VcfGlueFactory
 	 * @throws	ParserException
 	 * @throws	GlueException
 	 */
-	public function create($glueType, array $files)
+	public static function create($glueType, array $files)
 	{
 		switch ($glueType)
 		{
